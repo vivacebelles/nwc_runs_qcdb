@@ -1,0 +1,57 @@
+#!/bin/bash
+#SBATCH --job-name=tce_mp4_h2o
+#SBATCH --output=tce_mp4_h2o.stdout
+#SBATCH --error=tce_mp4_h2o.stderr
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=4
+#SBATCH --time=20:00:00
+source /work/LAS/twindus-lab/nwchem/6.6/environment
+TMPDIR=${TMPDIR:-/home/alolinco/nwc_runs_qcdb/tce_mp4}
+cat << EOF_print_debug_info
+$(printf "%s\n" "$(date)")
+$(printf "pwd = %s\n" "$PWD")
+
+* Begin Debugging Info
+** Submission file
+$(cat /home/alolinco/nwc_runs_qcdb/tce_mp4/tce_mp4_h2o.sub | sed s/\^/\\t/)
+
+** Working Directory
+TMPDIR=$TMPDIR: $([ -d $TMPDIR ] && printf "exists\n" || printf "does not exist\n")
+
+** Node List
+$(cat ${PBS_NODEFILE:-$SLURM_JOB_NODELIST})
+
+** PATH
+$(printf "%s\n" "$PATH" | sed s/:/\\n/g)
+
+** LD_LIBRARY_PATH
+$(printf "%s\n" "$LD_LIBRARY_PATH" | sed s/:/\\n/g)
+
+** env
+$(env)
+
+** jobfile
+$(cat /home/alolinco/nwc_runs_qcdb/tce_mp4/tce_mp4_h2o.nw | sed s/\^/\\t/)
+
+* Begin run output
+EOF_print_debug_info
+# Print node information and copy files for job
+cat >> /home/alolinco/nwc_runs_qcdb/tce_mp4/tce_mp4_h2o.nodes << EOF_jobinfo
+===$(date +"%Y-%m-%d-%r") run nodes===
+$(uniq ${PBS_NODEFILE:-$SLURM_JOB_NODELIST})
+Working directory $TMPDIR
+EOF_jobinfo
+
+ulimit -s unlimited
+ulimit -c unlimited
+ulimit -l unlimited
+cd $TMPDIR
+cp -v /home/alolinco/nwc_runs_qcdb/tce_mp4/{tce_mp4_h2o.nw,*.hess,*.movecs,*.db} $TMPDIR 2>/dev/null
+printf "Starting %s at %s.\n" "$(which nwchem)" "$(date)"
+# export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
+export I_MPI_PROCESS_MANAGER=mpd #changed for multiple nodes to work
+export ARMCI_DEFAULT_SHMMAX=32768
+# srun -N 1 -n 4 nwchem tce_mp4_h2o.nw |& tee /home/alolinco/nwc_runs_qcdb/tce_mp4/tce_mp4_h2o.out
+mpirun -n 4 nwchem tce_mp4_h2o.nw |& tee /home/alolinco/nwc_runs_qcdb/tce_mp4/tce_mp4_h2o.out
+printf "%s: nwchem finished with status $?\n" "$(date)"
+cp $TMPDIR/{*db,*hess,*movecs,ecce*,*log,*out} /home/alolinco/nwc_runs_qcdb/tce_mp4
