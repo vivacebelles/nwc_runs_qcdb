@@ -1,0 +1,58 @@
+#!/bin/bash
+#PBS -q default
+#PBS -l walltime=40:00:00
+#PBS -l nodes=1:ppn=4
+#PBS -W x=NACCESSPOLICY:SHARED
+#PBS -N sp-rhf-mp2
+#PBS -e sp-rhf-mp2.stderr
+#PBS -o sp-rhf-mp2.stdout
+
+
+#Set job specific environment variables
+nodes=`uniq $PBS_NODEFILE`
+scr=/var/scratch/alolinco/sp-rhf-mp2
+jobdir=/home/alolinco/nwc_runs_qcdb/mp2
+export ARMCI_DEFAULT_SHMMAX=8000
+
+#Set environment variables for the nwchem version
+source /home/weverett/nwchem/6.5-all/env
+# Old way of setting stuff
+#NWCHEM_DIR=/share/apps/nwchem
+#NWCHEM_VER=6.5-all
+#DATA_DIR=$NWCHEM_DIR/$NWCHEM_VER/data
+#export MPI_LOC=/share/apps/mpi/mvapich2-2.0rc1-mlnx
+#export NWCHEM_TOP=$NWCHEM_DIR/$NWCHEM_VER
+#export NWCHEM_BASIS_LIBRARY=$DATA_DIR/libraries/
+#export NWCHEM_NWPW_LIBRARY=$DATA_DIR/libraryps/
+#export AMBER_1=$DATA_DIR/amber_s/
+#export AMBER_2=$DATA_DIR/amber_q/
+#export AMBER_3=$DATA_DIR/amber_x/
+#export AMBER_4=$DATA_DIR/amber_u/
+#export SPCE=$DATA_DIR/solvents/spce.rst
+#export CHARMM_S=$DATA_DIR/charmm_s/
+#export CHARMM_X=$DATA_DIR/charmm_x/
+#export PATH=$NWCHEM_TOP/bin:$MPI_LOC/bin:$PATH
+#export MANPATH=$NWCHEM_TOP/src/tools/ma/man
+#export LD_LIBRARY_PATH=$MPI_LOC/lib:$LD_LIBRARY_PATH
+
+#Print node information and copy files for job
+printf "===$(date +"%Y-%m-%d-%r") run nodes===\n$nodes \n" >> $jobdir/sp-rhf-mp2.nodes
+for i in ${nodes}; do ssh $i "mkdir -p $scr";done
+cp $jobdir/sp-rhf-mp2.nw $scr
+cp $jobdir/*.movecs $scr
+cp $jobdir/*.hess $scr
+
+#eval `/usr/bin/modulecmd bash load nwchem/6.5-all`
+ulimit -s unlimited
+ulimit -c unlimited
+cd $scr
+mpdboot
+mpiexec -np 4 nwchem sp-rhf-mp2.nw | tee $jobdir/sp-rhf-mp2.out
+mpdallexit
+cp $scr/*.db $jobdir
+cp $scr/*.movecs $jobdir
+cp $scr/*.hess $jobdir
+cp $scr/ecce* $jobdir
+cp $scr/*.log $jobdir
+cp $scr/*.out $jobdir
+
