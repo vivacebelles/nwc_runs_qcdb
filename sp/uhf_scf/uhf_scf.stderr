@@ -1,0 +1,6 @@
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/sp/uhf_scf/*.movecs': No such file or directory
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/sp/uhf_scf/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/uhf_scf/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/uhf_scf/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/uhf_scf/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/uhf_scf/*.out': No such file or directory
