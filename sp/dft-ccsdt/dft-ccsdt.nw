@@ -1,0 +1,25 @@
+echo
+
+geometry
+O     0.000000000000    0.000000000000   -0.065638538099
+H     0.000000000000   -0.757480611647    0.520865616174
+H     0.000000000000    0.757480611647    0.520865616174
+end
+
+basis spherical
+* library sto-3g
+end
+
+dft
+ xc b3lyp
+ grid lebedev 99 11
+ convergence density 1.e-12
+end
+
+tce
+ dft
+ ccsdt
+ thresh 1.e-12
+end
+
+task tce energy
