@@ -1,305 +1,3 @@
-Mon Sep 10 14:35:19 CDT 2018
-pwd = /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq
-
-* Begin Debugging Info
-** Submission file
-	#!/bin/bash
-	#SBATCH --job-name=rhf-ccsdtq
-	#SBATCH --output=rhf-ccsdtq.stdout
-	#SBATCH --error=rhf-ccsdtq.stderr
-	#SBATCH --nodes=1
-	#SBATCH --ntasks-per-node=4
-	#SBATCH --time=50:00:00
-	source /work/LAS/twindus-lab/nwchem/6.6/environment
-	TMPDIR=${TMPDIR:-/home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq}
-	cat << EOF_print_debug_info
-	$(printf "%s\n" "$(date)")
-	$(printf "pwd = %s\n" "$PWD")
-	
-	* Begin Debugging Info
-	** Submission file
-	$(cat /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.sub | sed s/\^/\\t/)
-	
-	** Working Directory
-	TMPDIR=$TMPDIR: $([ -d $TMPDIR ] && printf "exists\n" || printf "does not exist\n")
-	
-	** Node List
-	$(cat ${PBS_NODEFILE:-$SLURM_JOB_NODELIST})
-	
-	** PATH
-	$(printf "%s\n" "$PATH" | sed s/:/\\n/g)
-	
-	** LD_LIBRARY_PATH
-	$(printf "%s\n" "$LD_LIBRARY_PATH" | sed s/:/\\n/g)
-	
-	** env
-	$(env)
-	
-	** jobfile
-	$(cat /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.nw | sed s/\^/\\t/)
-	
-	* Begin run output
-	EOF_print_debug_info
-	# Print node information and copy files for job
-	cat >> /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.nodes << EOF_jobinfo
-	===$(date +"%Y-%m-%d-%r") run nodes===
-	$(uniq ${PBS_NODEFILE:-$SLURM_JOB_NODELIST})
-	Working directory $TMPDIR
-	EOF_jobinfo
-	
-	ulimit -s unlimited
-	ulimit -c unlimited
-	ulimit -l unlimited
-	cd $TMPDIR
-	cp -v /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/{rhf-ccsdtq.nw,*.hess,*.movecs,*.db} $TMPDIR 2>/dev/null
-	printf "Starting %s at %s.\n" "$(which nwchem)" "$(date)"
-	# export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
-	export I_MPI_PROCESS_MANAGER=mpd #changed for multiple nodes to work
-	export ARMCI_DEFAULT_SHMMAX=32768
-	# srun -N 1 -n 4 nwchem rhf-ccsdtq.nw |& tee /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.out
-	mpirun -n 4 nwchem rhf-ccsdtq.nw |& tee /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.out
-	printf "%s: nwchem finished with status $?\n" "$(date)"
-	cp $TMPDIR/{*db,*hess,*movecs,ecce*,*log,*out} /home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq
-
-** Working Directory
-TMPDIR=/scratch/alolinco/348136: exists
-
-** Node List
-condo052
-condo052
-condo052
-condo052
-
-** PATH
-/work/LAS/twindus-lab/nwchem/6.6-intel/bin
-/shared/hpc/intel/17.4/advisor_2017.1.3.510716/bin64
-/shared/hpc/intel/17.4/vtune_amplifier_xe_2017.3.0.510739/bin64
-/shared/hpc/intel/17.4/inspector_2017.1.3.510645/bin64
-/shared/hpc/intel/17.4/itac/2017.3.030/intel64/bin
-/shared/hpc/intel/17.4/clck/2017.2.019/bin/intel64
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin
-/shared/hpc/intel/17.4/debugger_2017/gdb/intel64_mic/bin
-/shared/hpc/intel/17.4/parallel_studio_xe_2017.4.056/bin
-/usr/lib64/qt-3.3/bin
-/usr/local/bin
-/usr/bin
-/usr/local/sbin
-/usr/sbin
-~weverett/public
-~alolinco/public
-/home/alolinco/.local/bin
-/home/alolinco/bin
-
-** LD_LIBRARY_PATH
-/shared/hpc/intel/17.4/itac/2017.3.030/mic/slib
-/shared/hpc/intel/17.4/itac/2017.3.030/intel64/slib
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64_lin
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/lib
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/mic/lib
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp/lib/intel64
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64/gcc4.7
-/shared/hpc/intel/17.4/debugger_2017/iga/lib
-/shared/hpc/intel/17.4/debugger_2017/libipt/intel64/lib
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal/lib/intel64_lin
-/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64_lin/gcc4.4
-
-** env
-MKLROOT=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl
-CPLUS_INCLUDE_PATH=/shared/hpc/intel/17.4//clck/2017.2.019/include
-SLURM_CHECKPOINT_IMAGE_DIR=/var/slurm/checkpoint
-SLURM_NODELIST=condo052
-MPS_STAT_DIR_POSTFIX=%D-%T
-MPS_INTEL_LIBITTNOTIFY64=libmps.so
-SLURM_JOB_NAME=rhf-ccsdtq
-MANPATH=/shared/hpc/intel/17.4/itac/2017.3.030/man:/shared/hpc/intel/17.4/man/common:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/man:/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-ia/man:/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-mic/man:/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-igfx/man:/usr/share/lmod/lmod/share/man::
-XDG_SESSION_ID=23435
-VT_MPI=impi4
-SLURMD_NODENAME=condo052
-SLURM_TOPOLOGY_ADDR=condo052
-SLURM_NTASKS_PER_NODE=4
-_ModuleTable003_=bG1vZC9sbW9kL21vZHVsZWZpbGVzL0NvcmUiLH0sWyJzeXN0ZW1CYXNlTVBBVEgiXT0iL2V0Yy9tb2R1bGVmaWxlczovdXNyL3NoYXJlL21vZHVsZWZpbGVzOi91c3Ivc2hhcmUvbW9kdWxlZmlsZXMvTGludXg6L3Vzci9zaGFyZS9tb2R1bGVmaWxlcy9Db3JlOi91c3Ivc2hhcmUvbG1vZC9sbW9kL21vZHVsZWZpbGVzL0NvcmUiLFsidmVyc2lvbiJdPTIsfQ==
-HOSTNAME=condo052
-SLURM_PRIO_PROCESS=0
-SELINUX_ROLE_REQUESTED=
-IPPROOT=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp
-INTEL_LICENSE_FILE=/shared/hpc/intel/17.4/licenses
-SLURM_NODE_ALIASES=(null)
-CLCK_ROOT=/shared/hpc/intel/17.4//clck/2017.2.019
-TERM=xterm-256color
-SHELL=/bin/bash
-MPS_LD_PRELOAD=libmps.so
-SLURM_JOB_QOS=normal
-CLICOLOR=1
-HISTSIZE=1000
-GDBSERVER_MIC=/shared/hpc/intel/17.4/debugger_2017/gdb/targets/mic/bin/gdbserver
-SLURM_TOPOLOGY_ADDR_PATTERN=node
-LMOD_DEFAULT_MODULEPATH=/opt/rit/singularity/modules:/opt/rit/spack-modules/lmod/linux-rhel7-x86_64/Core:/shared/hpc/modulefiles:/etc/modulefiles:/usr/share/modulefiles:/usr/share/modulefiles/Linux:/usr/share/modulefiles/Core:/usr/share/lmod/lmod/modulefiles/Core
-MODULEPATH_ROOT=/usr/share/modulefiles
-TMPDIR=/scratch/alolinco/348136
-SSH_CLIENT=10.25.147.217 49558 22
-LIBRARY_PATH=/shared/hpc/intel/17.4/clck/2017.2.019/lib/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp/lib/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64/gcc4.7:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64_lin/gcc4.4
-SELINUX_USE_CURRENT_RANGE=
-LMOD_PKG=/usr/share/lmod/lmod
-QTDIR=/usr/lib64/qt-3.3
-ADVISOR_2017_DIR=/shared/hpc/intel/17.4/advisor_2017.1.3.510716
-LMOD_VERSION=6.5.1
-QTINC=/usr/lib64/qt-3.3/include
-MIC_LD_LIBRARY_PATH=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/mic/lib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp/lib/mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64_lin_mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin_mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/mic
-SSH_TTY=/dev/pts/51
-VTUNE_AMPLIFIER_XE_2017_DIR=/shared/hpc/intel/17.4/vtune_amplifier_xe_2017.3.0.510739
-QT_GRAPHICSSYSTEM_CHECKED=1
-SLURM_NNODES=1
-USER=alolinco
-NWCHEM_TOP=/work/LAS/twindus-lab/nwchem/6.6-intel/
-LD_LIBRARY_PATH=/shared/hpc/intel/17.4/itac/2017.3.030/mic/slib:/shared/hpc/intel/17.4/itac/2017.3.030/intel64/slib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/lib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/mic/lib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp/lib/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64/gcc4.7:/shared/hpc/intel/17.4/debugger_2017/iga/lib:/shared/hpc/intel/17.4/debugger_2017/libipt/intel64/lib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal/lib/intel64_lin:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/intel64_lin/gcc4.4
-LMOD_sys=Linux
-MPS_STAT_ENABLE_IDLE_VAL=1
-MIC_LIBRARY_PATH=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/mic/lib:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64_lin_mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin_mic:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/lib/mic
-CPATH=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/ipp/include:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/include:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb/include:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal/include
-SLURM_JOBID=348136
-TMOUT=5400
-SLURM_NTASKS=4
-NWCHEM_BASIS_LIBRARY=/work/LAS/twindus-lab/nwchem/6.6-intel/data/libraries/
-LSCOLORS=Exfxcxdxbxegedabagacad
-LMOD_PREPEND_BLOCK=normal
-NLSPATH=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/compiler/lib/intel64/locale/%l_%t/%N:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin/locale/%l_%t/%N:/shared/hpc/intel/17.4/debugger_2017/gdb/intel64_mic/share/locale/%l_%t/%N:/shared/hpc/intel/17.4/debugger_2017/gdb/intel64/share/locale/%l_%t/%N
-MPS_STAT_LEVEL=5
-SINGULARITY_TMPDIR=
-VT_ADD_LIBS=-ldwarf -lelf -lvtunwind -lm -lpthread
-SLURM_TASKS_PER_NODE=4
-_ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJhY3RpdmVTaXplIl09MSxiYXNlTXBhdGhBPXsiL29wdC9yaXQvc2luZ3VsYXJpdHkvbW9kdWxlcyIsIi9vcHQvcml0L3NwYWNrLW1vZHVsZXMvbG1vZC9saW51eC1yaGVsNy14ODZfNjQvQ29yZSIsIi9zaGFyZWQvaHBjL21vZHVsZWZpbGVzIiwiL2V0Yy9tb2R1bGVmaWxlcyIsIi91c3Ivc2hhcmUvbW9kdWxlZmlsZXMiLCIvdXNyL3NoYXJlL21vZHVsZWZpbGVzL0xpbnV4IiwiL3Vzci9zaGFyZS9tb2R1bGVmaWxlcy9Db3JlIiwiL3Vzci9zaGFyZS9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZSIsfSxbImNfcmVidWlsZFRpbWUiXT1mYWxzZSxbImNfc2hvcnRUaW1lIl09ZmFsc2UsZmFtaWx5PXt9LGluYWN0aXZlPXt9LG1UPXtpbnRlbD17WyJG
-MAIL=/var/spool/mail/alolinco
-PATH=/work/LAS/twindus-lab/nwchem/6.6-intel/bin:/shared/hpc/intel/17.4/advisor_2017.1.3.510716/bin64:/shared/hpc/intel/17.4/vtune_amplifier_xe_2017.3.0.510739/bin64:/shared/hpc/intel/17.4/inspector_2017.1.3.510645/bin64:/shared/hpc/intel/17.4/itac/2017.3.030/intel64/bin:/shared/hpc/intel/17.4/clck/2017.2.019/bin/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin:/shared/hpc/intel/17.4/debugger_2017/gdb/intel64_mic/bin:/shared/hpc/intel/17.4/parallel_studio_xe_2017.4.056/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:~weverett/public:~alolinco/public:/home/alolinco/.local/bin:/home/alolinco/bin
-SLURM_WORKING_CLUSTER=condo2017:172.16.253.4:6817:8192
-NWCHEM_NWPW_LIBRARY=/work/LAS/twindus-lab/nwchem/6.6-intel/data/libraryps/
-MPS_KMP_FORKJOIN_FRAMES_MODE=3
-SLURM_JOB_ID=348136
-TBBROOT=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/tbb
-LMOD_SETTARG_CMD=:
-F90=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64/ifort
-SLURM_JOB_USER=alolinco
-PWD=/home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq
-_LMFILES_=/shared/hpc/modulefiles/intel/17.4
-GDB_CROSS=/shared/hpc/intel/17.4/debugger_2017/gdb/intel64_mic/bin/gdb-mic
-LANG=en_US.UTF-8
-MODULEPATH=/opt/rit/singularity/modules:/opt/rit/spack-modules/lmod/linux-rhel7-x86_64/Core:/shared/hpc/modulefiles:/etc/modulefiles:/usr/share/modulefiles:/usr/share/modulefiles/Linux:/usr/share/modulefiles/Core:/usr/share/lmod/lmod/modulefiles/Core
-VT_LIB_DIR=/shared/hpc/intel/17.4//itac/2017.3.030/intel64/lib
-LOADEDMODULES=intel/17.4
-SLURM_JOB_UID=369342
-_ModuleTable_Sz_=3
-SLURM_NODEID=0
-MPS_STAT_ENABLE_IDLE=I_MPI_PVAR_IDLE
-F77=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64/ifort
-SLURM_SUBMIT_DIR=/work/LAS/twindus-lab/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq
-SELINUX_LEVEL_REQUESTED=
-VT_ROOT=/shared/hpc/intel/17.4//itac/2017.3.030
-SLURM_TASK_PID=16649
-SLURM_NPROCS=4
-LMOD_CMD=/usr/share/lmod/lmod/libexec/lmod
-MPS_TOOL_ROOT=/shared/hpc/intel/17.4/itac/2017.3.030
-DAALROOT=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal
-SLURM_CPUS_ON_NODE=4
-MPM_LAUNCHER=/shared/hpc/intel/17.4/debugger_2017/mpm/mic/bin/start_mpm.sh
-SLURM_PROCID=0
-ENVIRONMENT=BATCH
-HISTCONTROL=ignoredups
-KRB5CCNAME=KEYRING:persistent:369342
-INTEL_PYTHONHOME=/shared/hpc/intel/17.4/debugger_2017/python/intel64/
-SLURM_JOB_NODELIST=condo052
-SPCE=/work/LAS/twindus-lab/nwchem/6.6-intel/data/solvents/spce.rst
-SHLVL=3
-HOME=/home/alolinco
-SLURM_LOCALID=0
-GREP_OPTIONS=--color=auto
-SLURM_JOB_GID=101
-SLURM_JOB_CPUS_PER_NODE=4
-SLURM_CLUSTER_NAME=condo2017
-_ModuleTable002_=TiJdPSIvc2hhcmVkL2hwYy9tb2R1bGVmaWxlcy9pbnRlbC8xNy40IixbImRlZmF1bHQiXT0wLFsiZnVsbE5hbWUiXT0iaW50ZWwvMTcuNCIsWyJsb2FkT3JkZXIiXT0xLHByb3BUPXt9LFsic2hvcnQiXT0iaW50ZWwiLFsic3RhdHVzIl09ImFjdGl2ZSIsfSx9LG1wYXRoQT17Ii9vcHQvcml0L3Npbmd1bGFyaXR5L21vZHVsZXMiLCIvb3B0L3JpdC9zcGFjay1tb2R1bGVzL2xtb2QvbGludXgtcmhlbDcteDg2XzY0L0NvcmUiLCIvc2hhcmVkL2hwYy9tb2R1bGVmaWxlcyIsIi9ldGMvbW9kdWxlZmlsZXMiLCIvdXNyL3NoYXJlL21vZHVsZWZpbGVzIiwiL3Vzci9zaGFyZS9tb2R1bGVmaWxlcy9MaW51eCIsIi91c3Ivc2hhcmUvbW9kdWxlZmlsZXMvQ29yZSIsIi91c3Ivc2hhcmUv
-AMBER_1=/work/LAS/twindus-lab/nwchem/6.6-intel/data/amber_s/
-VT_SLIB_DIR=/shared/hpc/intel/17.4//itac/2017.3.030/intel64/slib
-VT_ARCH=intel64
-FC=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64/ifort
-SLURM_GTIDS=0
-SLURM_SUBMIT_HOST=condo2017.its.iastate.edu
-AMBER_2=/work/LAS/twindus-lab/nwchem/6.6-intel/data/amber_q/
-SLURM_JOB_PARTITION=short_1node
-BASH_ENV=/usr/share/lmod/lmod/init/bash
-AMBER_3=/work/LAS/twindus-lab/nwchem/6.6-intel/data/amber_x/
-PYTHONPATH=/shared/hpc/intel/17.4/advisor_2017.1.3.510716/pythonapi
-LMOD_arch=x86_64
-LOGNAME=alolinco
-AMBER_4=/work/LAS/twindus-lab/nwchem/6.6-intel/data/amber_u/
-QTLIB=/usr/lib64/qt-3.3/lib
-CLASSPATH=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/lib/mpi.jar:/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/daal/lib/daal.jar
-SLURM_JOB_ACCOUNT=its-hpc-condo-las
-XDG_DATA_DIRS=/home/alolinco/.local/share/flatpak/exports/share/:/var/lib/flatpak/exports/share/:/usr/local/share/:/usr/share/
-SSH_CONNECTION=10.25.147.217 49558 10.24.107.19 22
-MPS_STAT_MESSAGES=1
-SLURM_JOB_NUM_NODES=1
-MODULESHOME=/usr/share/lmod/lmod
-CHARMM_X=/work/LAS/twindus-lab/nwchem/6.6-intel/data/charmm_x/
-LESSOPEN=||/usr/bin/lesspipe.sh %s
-INSPECTOR_2017_DIR=/shared/hpc/intel/17.4/inspector_2017.1.3.510645
-PTMPDIR=/ptmp/alolinco
-INFOPATH=/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-ia/info:/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-mic/info:/shared/hpc/intel/17.4/documentation_2017/en/debugger/gdb-igfx/info
-LMOD_FULL_SETTARG_SUPPORT=no
-CC=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/bin/intel64/icc
-XDG_RUNTIME_DIR=/run/user/369342
-CHARMM_S=/work/LAS/twindus-lab/nwchem/6.6-intel/data/charmm_s/
-LMOD_DIR=/usr/share/lmod/lmod/libexec
-PBS_NODEFILE=/scratch/alolinco/348136/oMHBwy6AZH
-SLURM_MEM_PER_NODE=128834
-LMOD_COLORIZE=yes
-I_MPI_ROOT=/shared/hpc/intel/17.4/compilers_and_libraries_2017.4.196/linux/mpi
-BASH_FUNC_module()=() {  eval $($LMOD_CMD bash "$@");
- [ $? = 0 ] && eval $(${LMOD_SETTARG_CMD:-:} -s sh)
-}
-BASH_FUNC_ml()=() {  eval $($LMOD_DIR/ml_cmd "$@")
-}
-_=/usr/bin/env
-
-** jobfile
-	echo
-	
-	start rhf-ccsdtq
-	
-	memory total 2000 global 1700 mb verify
-	geometry nocenter noautosym
-	O     0.000000000000    0.000000000000   -0.065638538099
-	H     0.000000000000   -0.757480611647    0.520865616174
-	H     0.000000000000    0.757480611647    0.520865616174
-	symmetry c2v
-	end
-	
-	basis
-	* library 6-31g*
-	end
-	
-	scf
-	 rhf
-	 singlet
-	 thresh 1.0e-7 #Not the same as e_convergence and d_convergence
-	end
-	
-	tce
-	 scf
-	 ccsdtq
-	 thresh 1.0e-7
-	end
-	
-	task tce energy
-
-* Begin run output
-‘/home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/rhf-ccsdtq.nw’ -> ‘/scratch/alolinco/348136/rhf-ccsdtq.nw’
-Starting /work/LAS/twindus-lab/nwchem/6.6-intel/bin/nwchem at Mon Sep 10 14:35:19 CDT 2018.
-export PBS_NODEFILE=/scratch/alolinco/348136/gYPY6m8A2e
-export TMPDIR=/scratch/alolinco/348136
-export TMOUT=5400
-export TMPDIR=/scratch/alolinco/348136
-export PTMPDIR=/ptmp/alolinco
  argument  1 = rhf-ccsdtq.nw
  
 
@@ -307,14 +5,11 @@ export PTMPDIR=/ptmp/alolinco
 ============================== echo of input deck ==============================
 echo
 
-start rhf-ccsdtq
-
 memory total 2000 global 1700 mb verify
-geometry nocenter noautosym
+geometry
 O     0.000000000000    0.000000000000   -0.065638538099
 H     0.000000000000   -0.757480611647    0.520865616174
 H     0.000000000000    0.757480611647    0.520865616174
-symmetry c2v
 end
 
 basis
@@ -323,8 +18,7 @@ end
 
 scf
  rhf
- singlet
- thresh 1.0e-7 #Not the same as e_convergence and d_convergence
+ thresh 1.0e-7
 end
 
 tce
@@ -341,7 +35,7 @@ task tce energy
                                          
  
  
-              Northwest Computational Chemistry Package (NWChem) 6.6
+              Northwest Computational Chemistry Package (NWChem) 6.5
               ------------------------------------------------------
  
  
@@ -349,7 +43,7 @@ task tce energy
                        Pacific Northwest National Laboratory
                                 Richland, WA 99352
  
-                              Copyright (c) 1994-2015
+                              Copyright (c) 1994-2014
                        Pacific Northwest National Laboratory
                             Battelle Memorial Institute
  
@@ -374,15 +68,15 @@ task tce energy
            Job information
            ---------------
 
-    hostname        = condo052
+    hostname        = compute-0-13.local
     program         = nwchem
-    date            = Mon Sep 10 14:35:22 2018
+    date            = Tue Sep 25 14:20:40 2018
 
-    compiled        = Tue_Oct_24_08:26:58_2017
-    source          = /home/weverett/build/nwchem/nwchem-6.6-intel
-    nwchem branch   = 6.6
-    nwchem revision = 27746
-    ga revision     = 10594
+    compiled        = Mon_Oct_12_17:43:00_2015
+    source          = /home/weverett/nwchem-build/nwchem-6.5
+    nwchem branch   = 6.5
+    nwchem revision = 26243
+    ga revision     = 10506
     input           = rhf-ccsdtq.nw
     prefix          = rhf-ccsdtq.
     data base       = ./rhf-ccsdtq.db
@@ -420,6 +114,7 @@ task tce energy
  Scaling coordinates for geometry "geometry" by  1.889725989
  (inverse scale =  0.529177249)
 
+ C2V symmetry detected
 
           ------
           auto-z
@@ -433,9 +128,9 @@ task tce energy
  
   No.       Tag          Charge          X              Y              Z
  ---- ---------------- ---------- -------------- -------------- --------------
-    1 O                    8.0000     0.00000000     0.00000000    -0.06563854
-    2 H                    1.0000     0.00000000    -0.75748061     0.52086562
-    3 H                    1.0000     0.00000000     0.75748061     0.52086562
+    1 O                    8.0000     0.00000000     0.00000000    -0.11730083
+    2 H                    1.0000     0.75748061     0.00000000     0.46920332
+    3 H                    1.0000    -0.75748061     0.00000000     0.46920332
  
       Atomic Mass 
       ----------- 
@@ -450,7 +145,7 @@ task tce energy
             ----------------------------
         X                 Y               Z
  ---------------- ---------------- ----------------
-     0.0000000000     0.0000000000     0.9762757725
+     0.0000000000     0.0000000000     0.0000000000
  
       Symmetry information
       --------------------
@@ -482,9 +177,9 @@ task tce energy
             -------------------
      3
  geometry
- O                     0.00000000     0.00000000    -0.06563854
- H                     0.00000000    -0.75748061     0.52086562
- H                     0.00000000     0.75748061     0.52086562
+ O                     0.00000000     0.00000000    -0.11730083
+ H                     0.75748061     0.00000000     0.46920332
+ H                    -0.75748061     0.00000000     0.46920332
  
  ==============================================================================
                                 internuclear distances
@@ -512,7 +207,7 @@ task tce energy
 
 
   library name resolved from: environment
-  library file name is: </work/LAS/twindus-lab/nwchem/6.6-intel/data/libraries/>
+  library file name is: </home/weverett/nwchem/6.5-all/data/libraries/>
   
 
 
@@ -601,11 +296,11 @@ task tce energy
  
         a1         10
         a2          1
-        b1          3
-        b2          5
+        b1          5
+        b2          3
  
 
- Forming initial guess at       0.3s
+ Forming initial guess at       0.5s
 
  
       Superposition of Atomic Density Guess
@@ -632,12 +327,12 @@ task tce energy
  
   Orbital symmetries:
  
-     1 a1          2 a1          3 b2          4 a1          5 b1      
-     6 a1          7 b2          8 b2          9 a1         10 b1      
-    11 a1         12 b2         13 a1         14 a1         15 a2      
+     1 a1          2 a1          3 b1          4 a1          5 b2      
+     6 a1          7 b1          8 b1          9 a1         10 b2      
+    11 a1         12 b1         13 a1         14 a1         15 a2      
  
 
- Starting SCF solution at       0.4s
+ Starting SCF solution at       0.7s
 
 
 
@@ -654,9 +349,9 @@ task tce energy
 
 
  Integral file          = ./rhf-ccsdtq.aoints.0
- Record size in doubles =    65536    No. of integs per rec  =    43688
- Max. records in memory =        2    Max. records in file   =  1240321
- No. of bits per label  =        8    No. of bits per value  =       64
+ Record size in doubles =  65536        No. of integs per rec  =  43688
+ Max. records in memory =      2        Max. records in file   = 409206
+ No. of bits per label  =      8        No. of bits per value  =     64
 
 
 File balance: exchanges=     0  moved=     0  time=   0.0
@@ -664,23 +359,23 @@ File balance: exchanges=     0  moved=     0  time=   0.0
 
               iter       energy          gnorm     gmax       time
              ----- ------------------- --------- --------- --------
-                 1      -75.9747059939  8.31D-01  3.41D-01      0.0
-                 2      -76.0080522872  1.84D-01  1.02D-01      0.0
-                 3      -76.0103775811  4.09D-02  2.40D-02      0.0
-                 4      -76.0104960660  1.64D-03  9.33D-04      0.0
-                 5      -76.0104963070  2.30D-06  9.69D-07      0.0
-                 6      -76.0104963070  4.65D-09  2.36D-09      0.0
+                 1      -75.9747059939  8.31D-01  3.41D-01      0.5
+                 2      -76.0080522872  1.84D-01  1.02D-01      0.6
+                 3      -76.0103775812  4.09D-02  2.40D-02      0.7
+                 4      -76.0104960660  1.64D-03  9.33D-04      0.7
+                 5      -76.0104963071  2.30D-06  9.69D-07      0.8
+                 6      -76.0104963071  4.65D-09  2.36D-09      1.0
 
 
        Final RHF  results 
        ------------------ 
 
-         Total SCF energy =    -76.010496307018
-      One-electron energy =   -123.041302411205
-      Two-electron energy =     37.843471864022
+         Total SCF energy =    -76.010496307052
+      One-electron energy =   -123.041302411214
+      Two-electron energy =     37.843471863997
  Nuclear repulsion energy =      9.187334240165
 
-        Time for solution =      0.0s
+        Time for solution =      0.5s
 
 
  
@@ -693,9 +388,9 @@ File balance: exchanges=     0  moved=     0  time=   0.0
  
   Orbital symmetries:
  
-     1 a1          2 a1          3 b2          4 a1          5 b1      
-     6 a1          7 b2          8 b2          9 a1         10 b1      
-    11 a1         12 b2         13 a1         14 a1         15 a2      
+     1 a1          2 a1          3 b1          4 a1          5 b2      
+     6 a1          7 b1          8 b1          9 a1         10 b2      
+    11 a1         12 b1         13 a1         14 a1         15 a2      
  
              Final eigenvalues
              -----------------
@@ -721,106 +416,106 @@ File balance: exchanges=     0  moved=     0  time=   0.0
                        -------------------------------------
  
  Vector    2  Occ=2.000000D+00  E=-1.341405D+00  Symmetry=a1
-              MO Center=  1.0D-18,  1.1D-17,  1.1D-01, r^2= 5.0D-01
+              MO Center=  6.9D-18, -6.4D-35,  5.6D-02, r^2= 5.0D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      2      0.475891  1 O  s                  6      0.439654  1 O  s          
      1     -0.209704  1 O  s          
  
- Vector    3  Occ=2.000000D+00  E=-7.064718D-01  Symmetry=b2
-              MO Center= -2.6D-18,  3.0D-16,  1.5D-01, r^2= 7.7D-01
+ Vector    3  Occ=2.000000D+00  E=-7.064718D-01  Symmetry=b1
+              MO Center=  1.4D-17, -3.4D-20,  1.0D-01, r^2= 7.7D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
-     4      0.507475  1 O  py                 8      0.306693  1 O  py         
-    16     -0.230862  2 H  s                 18      0.230862  3 H  s          
+     3      0.507475  1 O  px                 7      0.306693  1 O  px         
+    16      0.230862  2 H  s                 18     -0.230862  3 H  s          
  
  Vector    4  Occ=2.000000D+00  E=-5.709039D-01  Symmetry=a1
-              MO Center=  8.6D-33, -1.8D-17, -1.2D-01, r^2= 6.9D-01
+              MO Center= -3.5D-18,  1.5D-19, -1.7D-01, r^2= 6.9D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      5      0.555308  1 O  pz                 9      0.403174  1 O  pz         
      6     -0.325343  1 O  s                  2     -0.164548  1 O  s          
  
- Vector    5  Occ=2.000000D+00  E=-4.978584D-01  Symmetry=b1
-              MO Center= -9.4D-17, -1.4D-16, -4.6D-02, r^2= 6.0D-01
+ Vector    5  Occ=2.000000D+00  E=-4.978584D-01  Symmetry=b2
+              MO Center=  1.4D-17, -8.9D-18, -9.8D-02, r^2= 6.0D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
-     3      0.639642  1 O  px                 7      0.511444  1 O  px         
+     4      0.639642  1 O  py                 8      0.511444  1 O  py         
  
  Vector    6  Occ=0.000000D+00  E= 2.105785D-01  Symmetry=a1
-              MO Center=  7.0D-17, -1.4D-16,  7.0D-01, r^2= 2.6D+00
+              MO Center= -3.3D-16, -4.1D-17,  6.5D-01, r^2= 2.6D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      6      1.413198  1 O  s                 17     -1.040479  2 H  s          
     19     -1.040479  3 H  s                  9      0.508432  1 O  pz         
      5      0.217485  1 O  pz         
  
- Vector    7  Occ=0.000000D+00  E= 3.039535D-01  Symmetry=b2
-              MO Center=  6.0D-18,  1.3D-15,  6.7D-01, r^2= 2.7D+00
+ Vector    7  Occ=0.000000D+00  E= 3.039535D-01  Symmetry=b1
+              MO Center=  0.0D+00, -2.5D-32,  6.2D-01, r^2= 2.7D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
     17      1.392854  2 H  s                 19     -1.392854  3 H  s          
-     8      0.833296  1 O  py                 4      0.329608  1 O  py         
+     7     -0.833296  1 O  px                 3     -0.329608  1 O  px         
  
- Vector    8  Occ=0.000000D+00  E= 1.022228D+00  Symmetry=b2
-              MO Center=  2.8D-18,  2.9D-16,  1.0D-01, r^2= 1.5D+00
+ Vector    8  Occ=0.000000D+00  E= 1.022228D+00  Symmetry=b1
+              MO Center=  0.0D+00, -2.4D-18,  4.9D-02, r^2= 1.5D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
     16      0.838964  2 H  s                 18     -0.838964  3 H  s          
-     8      0.658248  1 O  py                17     -0.462615  2 H  s          
-    19      0.462615  3 H  s                 14     -0.343335  1 O  dyz        
+     7     -0.658248  1 O  px                17     -0.462615  2 H  s          
+    19      0.462615  3 H  s                 12      0.343335  1 O  dxz        
  
  Vector    9  Occ=0.000000D+00  E= 1.131541D+00  Symmetry=a1
-              MO Center=  7.9D-17, -3.9D-16, -1.3D-01, r^2= 1.6D+00
+              MO Center= -1.0D-16,  3.4D-18, -1.9D-01, r^2= 1.6D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      6      1.634691  1 O  s                  2     -0.921792  1 O  s          
      9     -0.701526  1 O  pz                16      0.557323  2 H  s          
     18      0.557323  3 H  s                 17     -0.480265  2 H  s          
     19     -0.480265  3 H  s                  5      0.408254  1 O  pz         
-    10     -0.388441  1 O  dxx               15     -0.317084  1 O  dzz        
+    13     -0.388441  1 O  dyy               15     -0.317084  1 O  dzz        
  
- Vector   10  Occ=0.000000D+00  E= 1.167786D+00  Symmetry=b1
-              MO Center= -2.7D-16, -5.4D-17, -6.2D-02, r^2= 1.1D+00
+ Vector   10  Occ=0.000000D+00  E= 1.167786D+00  Symmetry=b2
+              MO Center= -8.8D-17, -3.0D-15, -1.1D-01, r^2= 1.1D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
-     7     -1.036062  1 O  px                 3      0.962728  1 O  px         
+     8     -1.036062  1 O  py                 4      0.962728  1 O  py         
  
  Vector   11  Occ=0.000000D+00  E= 1.170958D+00  Symmetry=a1
-              MO Center=  2.5D-16, -3.0D-16,  7.7D-02, r^2= 1.1D+00
+              MO Center=  7.5D-17,  3.5D-15,  2.5D-02, r^2= 1.1D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      5      0.766347  1 O  pz                16     -0.653558  2 H  s          
     18     -0.653558  3 H  s                  6      0.485201  1 O  s          
      9     -0.380494  1 O  pz                17      0.351467  2 H  s          
-    19      0.351467  3 H  s                 13     -0.251584  1 O  dyy        
+    19      0.351467  3 H  s                 10     -0.251584  1 O  dxx        
  
- Vector   12  Occ=0.000000D+00  E= 1.380585D+00  Symmetry=b2
-              MO Center= -1.4D-21,  3.2D-16, -6.5D-03, r^2= 1.4D+00
+ Vector   12  Occ=0.000000D+00  E= 1.380585D+00  Symmetry=b1
+              MO Center= -2.3D-15, -1.1D-17, -5.8D-02, r^2= 1.4D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
-     8      1.537172  1 O  py                 4     -1.037109  1 O  py         
-    17      0.912872  2 H  s                 19     -0.912872  3 H  s          
+     7      1.537172  1 O  px                 3     -1.037109  1 O  px         
+    17     -0.912872  2 H  s                 19      0.912872  3 H  s          
  
  Vector   13  Occ=0.000000D+00  E= 1.434056D+00  Symmetry=a1
-              MO Center= -2.3D-17, -9.7D-16,  4.4D-01, r^2= 1.3D+00
+              MO Center=  2.4D-15, -3.9D-16,  3.9D-01, r^2= 1.3D+00
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
      6      3.568825  1 O  s                  2     -1.416773  1 O  s          
      9      1.174952  1 O  pz                17     -0.782907  2 H  s          
-    19     -0.782907  3 H  s                 13     -0.644343  1 O  dyy        
+    19     -0.782907  3 H  s                 10     -0.644343  1 O  dxx        
      5     -0.507257  1 O  pz                15     -0.402128  1 O  dzz        
     16     -0.323719  2 H  s                 18     -0.323719  3 H  s          
  
  Vector   14  Occ=0.000000D+00  E= 2.020281D+00  Symmetry=a1
-              MO Center=  7.6D-19, -2.6D-17, -1.1D-01, r^2= 6.2D-01
+              MO Center= -6.0D-17, -1.6D-18, -1.6D-01, r^2= 6.2D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
-    15      1.008777  1 O  dzz               13     -0.580887  1 O  dyy        
-    10     -0.366504  1 O  dxx                6     -0.226754  1 O  s          
+    15      1.008777  1 O  dzz               10     -0.580887  1 O  dxx        
+    13     -0.366504  1 O  dyy                6     -0.226754  1 O  s          
  
  Vector   15  Occ=0.000000D+00  E= 2.033978D+00  Symmetry=a2
-              MO Center= -1.9D-17, -3.2D-16, -6.6D-02, r^2= 6.1D-01
+              MO Center=  1.6D-16,  1.3D-17, -1.2D-01, r^2= 6.1D-01
    Bfn.  Coefficient  Atom+Function         Bfn.  Coefficient  Atom+Function  
   ----- ------------  ---------------      ----- ------------  ---------------
     11      1.732051  1 O  dxy        
@@ -828,12 +523,12 @@ File balance: exchanges=     0  moved=     0  time=   0.0
 
  center of mass
  --------------
- x =   0.00000000 y =   0.00000000 z =   0.00000003
+ x =   0.00000000 y =   0.00000000 z =  -0.09762755
 
  moments of inertia (a.u.)
  ------------------
-           6.328975696429           0.000000000000           0.000000000000
-           0.000000000000           2.198920681254           0.000000000000
+           2.198920681254           0.000000000000           0.000000000000
+           0.000000000000           6.328975696429           0.000000000000
            0.000000000000           0.000000000000           4.130055015175
  
   Mulliken analysis of the total density
@@ -852,16 +547,16 @@ File balance: exchanges=     0  moved=     0  time=   0.0
      -   - - -        -----         ----         -------
      0   0 0 0     -0.000000      0.000000     10.000000
  
-     1   1 0 0      0.000000      0.000000      0.000000
-     1   0 1 0     -0.000000      0.000000      0.000000
-     1   0 0 1      0.875724      0.000000      0.976276
+     1   1 0 0     -0.000000      0.000000      0.000000
+     1   0 1 0      0.000000      0.000000      0.000000
+     1   0 0 1      0.875724      0.000000      0.000000
  
-     2   2 0 0     -5.373932      0.000000      0.000000
-     2   1 1 0     -0.000000      0.000000      0.000000
-     2   1 0 1      0.000000      0.000000      0.000000
-     2   0 2 0     -3.070694      0.000000      4.097988
-     2   0 1 1     -0.000000      0.000000      0.000000
-     2   0 0 2     -4.273652      0.000000      2.060752
+     2   2 0 0     -3.070694      0.000000      4.097988
+     2   1 1 0      0.000000      0.000000      0.000000
+     2   1 0 1     -0.000000      0.000000      0.000000
+     2   0 2 0     -5.373932      0.000000      0.000000
+     2   0 1 1      0.000000      0.000000      0.000000
+     2   0 0 2     -4.444642      0.000000      1.965440
  
 
  Parallel integral file used       4 records with       0 large values
@@ -914,8 +609,8 @@ File balance: exchanges=     0  moved=     0  time=   0.0
      T(I) DIIS level shift : 0.00D+00
    CC-T/L Amplitude update :  5-th order DIIS
                 I/O scheme : Global Array Library
-        L-threshold :  0.10D-06
-        EOM-threshold :  0.10D-06
+        L-threshold : 0.10D-06
+        EOM-threshold : 0.10D-06
  no EOMCCSD initial starts read in
  TCE RESTART OPTIONS
  READ_INT:   F
@@ -948,12 +643,12 @@ File balance: exchanges=     0  moved=     0  time=   0.0
    6    beta      b2     1 doubles       9       3
    7    alpha     a1     7 doubles      10       7
    8    alpha     a2     1 doubles      17       8
-   9    alpha     b1     2 doubles      18       9
-  10    alpha     b2     4 doubles      20      10
+   9    alpha     b1     4 doubles      18       9
+  10    alpha     b2     2 doubles      22      10
   11    beta      a1     7 doubles      24       7
   12    beta      a2     1 doubles      31       8
-  13    beta      b1     2 doubles      32       9
-  14    beta      b2     4 doubles      34      10
+  13    beta      b1     4 doubles      32       9
+  14    beta      b2     2 doubles      36      10
 
  Global array virtual files algorithm will be used
 
@@ -963,9 +658,9 @@ File balance: exchanges=     0  moved=     0  time=   0.0
 
 
  Integral file          = ./rhf-ccsdtq.aoints.0
- Record size in doubles =    65536    No. of integs per rec  =    43688
- Max. records in memory =        2    Max. records in file   =  1240321
- No. of bits per label  =        8    No. of bits per value  =       64
+ Record size in doubles =  65536        No. of integs per rec  =  43688
+ Max. records in memory =      2        Max. records in file   = 409206
+ No. of bits per label  =      8        No. of bits per value  =     64
 
 
 File balance: exchanges=     0  moved=     0  time=   0.0
@@ -974,21 +669,26 @@ File balance: exchanges=     0  moved=     0  time=   0.0
  Fock matrix recomputed
  1-e file size   =              135
  1-e file name   = ./rhf-ccsdtq.f1     
- Cpu & wall time / sec            0.0            0.0
+ Cpu & wall time / sec            0.0            0.2
  
  tce_ao2e: fast2e=1
  half-transformed integrals in memory
  
  2-e (intermediate) file size =          289883
  2-e (intermediate) file name = ./rhf-ccsdtq.v2i
- Cpu & wall time / sec            0.0            0.0
+ Cpu & wall time / sec            0.1            0.1
  
  tce_mo2e: fast2e=1
  2-e integrals stored in memory
  
  2-e file size   =            53184
  2-e file name   = ./rhf-ccsdtq.v2     
- Cpu & wall time / sec            0.0            0.0
+ Cpu & wall time / sec            0.1            0.2
+ do_pt =  F
+ do_lam_pt =  F
+ do_cr_pt =  F
+ do_lcr_pt =  F
+ do_2t_pt =  F
  T1-number-of-tasks                     3
  
  t1 file size   =               27
@@ -1010,7 +710,7 @@ File balance: exchanges=     0  moved=     0  time=   0.0
  ------------------------------------------------------------------------
  ------------------------------------------------------------------------
   current input line : 
-    29: task tce energy
+    25: task tce energy
  ------------------------------------------------------------------------
  ------------------------------------------------------------------------
  A feature requested has not yet been implemented
@@ -1025,6 +725,34 @@ File balance: exchanges=     0  moved=     0  time=   0.0
                                                                                 
                                                                                 
                    
+ CCSDTQ not compiled (tce_energy.F)                   0
+ ------------------------------------------------------------------------
+ ------------------------------------------------------------------------
+  current input line : 
+     0: 
+ ------------------------------------------------------------------------
+ ------------------------------------------------------------------------
+ A feature requested has not yet been implemented
+ 
 0:0:CCSDTQ not compiled (tce_energy.F):: -1
-(rank:0 hostname:condo052 pid:16739):ARMCI DASSERT fail. ../../ga-5-4/armci/src/common/armci.c:ARMCI_Error():208 cond:0
-Mon Sep 10 14:35:26 CDT 2018: nwchem finished with status 0
+ ------------------------------------------------------------------------
+ For more information see the NWChem manual at 
+ http://www.nwchem-sw.org/index.php/NWChem_Documentation
+
+
+ For further details see manual section: 
+                                                                                
+                                                                                
+                                                                                
+                   
+(rank:0 hostname:compute-0-13.local pid:10620):ARMCI DASSERT fail. ../../ga-5-3/armci/src/common/armci.c:ARMCI_Error():208 cond:0
+3:3:CCSDTQ not compiled (tce_energy.F):: -1
+(rank:3 hostname:compute-0-13.local pid:10623):ARMCI DASSERT fail. ../../ga-5-3/armci/src/common/armci.c:ARMCI_Error():208 cond:0
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 10623 RUNNING AT compute-0-13
+=   EXIT CODE: 255
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================

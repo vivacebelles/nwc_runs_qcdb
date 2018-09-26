@@ -1,4 +1,12 @@
-cp: cannot stat ‘/scratch/alolinco/348136/*hess’: No such file or directory
-cp: cannot stat ‘/scratch/alolinco/348136/ecce*’: No such file or directory
-cp: cannot stat ‘/scratch/alolinco/348136/*log’: No such file or directory
-cp: cannot stat ‘/scratch/alolinco/348136/*out’: No such file or directory
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/*.movecs': No such file or directory
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/tce/tce-rhf-ccsdtq/*.hess': No such file or directory
+Last System Error Message from Task 0:: No such file or directory
+Last System Error Message from Task 3:: Invalid argument
+[cli_0]: aborting job:
+application called MPI_Abort(comm=0x84000007, -1) - process 0
+[cli_3]: aborting job:
+application called MPI_Abort(comm=0x84000004, -1) - process 3
+cp: cannot stat `/var/scratch/alolinco/rhf-ccsdtq/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rhf-ccsdtq/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rhf-ccsdtq/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rhf-ccsdtq/*.out': No such file or directory
