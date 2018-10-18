@@ -1,0 +1,5 @@
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/sp/rhf_scf/energy/test/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/test2/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/test2/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/test2/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/test2/*.out': No such file or directory

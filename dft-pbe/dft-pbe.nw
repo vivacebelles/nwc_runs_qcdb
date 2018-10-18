@@ -1,0 +1,22 @@
+memory 300 mb
+geometry units Angstrom
+O     0.000000000000    0.000000000000   -0.068516219310
+H     0.000000000000   -0.790689573744    0.543701060724
+H     0.000000000000    0.790689573744    0.543701060724
+end
+basis spherical
+ * library sto-3g
+end
+charge 0
+
+
+dft
+direct
+xc xpbe96 cpbe96
+grid lebedev 99 14
+convergence energy 1e-7 density 1e-7
+end
+
+task scf energy
+
+task dft energy

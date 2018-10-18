@@ -1,0 +1,8 @@
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/test_check/*.hess': No such file or directory
+Last System Error Message from Task 0:: No such file or directory
+[cli_0]: aborting job:
+application called MPI_Abort(comm=0x84000007, 4) - process 0
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_h2o/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_h2o/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_h2o/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_h2o/*.out': No such file or directory

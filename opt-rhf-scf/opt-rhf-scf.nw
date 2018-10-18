@@ -1,0 +1,22 @@
+echo
+
+memory 400 mb
+
+geometry nocenter noautosym 
+O     0.000000000000    0.000000000000   -0.065638538099
+H     0.000000000000   -0.757480611647    0.520865616174
+H     0.000000000000    0.757480611647    0.520865616174
+symmetry c2v
+end
+
+basis 
+* library 6-31g*
+end
+
+scf
+ rhf
+ thresh 1.0e-8 
+ direct 
+end
+
+task scf optimize

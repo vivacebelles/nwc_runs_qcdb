@@ -1,0 +1,14 @@
+echo
+
+memory 400 mb
+geometry noautosym nocenter units Angstrom
+O     0.000000000000    0.000000000000   -0.065638538099
+H     0.000000000000   -0.757480611647    0.520865616174
+H    -0.000000000000    0.757480611647    0.520865616174
+end
+
+basis spherical
+* library cc-pvdz
+end
+
+task scf energy

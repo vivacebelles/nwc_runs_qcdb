@@ -1,0 +1,6 @@
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/dft-pbe/*.movecs': No such file or directory
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/dft-pbe/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/dft-pbe/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/dft-pbe/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/dft-pbe/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/dft-pbe/*.out': No such file or directory
