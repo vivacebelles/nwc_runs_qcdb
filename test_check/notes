@@ -1,0 +1,2 @@
+Note the change between NWChem 6.5 and 6.8
+-SODFT calculation has SO-DFT Energy specified when running the job listed.
