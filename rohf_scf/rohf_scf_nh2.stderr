@@ -1,0 +1,10 @@
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/rohf_scf/*.movecs': No such file or directory
+cp: cannot stat `/home/alolinco/nwc_runs_qcdb/rohf_scf/*.hess': No such file or directory
+Last System Error Message from Task 0:: No such file or directory
+[cli_0]: aborting job:
+application called MPI_Abort(comm=0x84000007, 4) - process 0
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_nh2/*.movecs': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_nh2/*.hess': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_nh2/ecce*': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_nh2/*.log': No such file or directory
+cp: cannot stat `/var/scratch/alolinco/rohf_scf_nh2/*.out': No such file or directory
