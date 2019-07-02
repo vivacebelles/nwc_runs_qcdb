@@ -1,0 +1,3 @@
+cp: cannot stat ‘/scratch/alolinco/349790/ecce*’: No such file or directory
+cp: cannot stat ‘/scratch/alolinco/349790/*log’: No such file or directory
+cp: cannot stat ‘/scratch/alolinco/349790/*out’: No such file or directory
